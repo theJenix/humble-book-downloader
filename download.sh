@@ -4,7 +4,8 @@
 set -e
 #set -x
 
-desttop=~/Dropbox/eBooks/Humble\ Bundle
+# Eval for tilde/path expansion
+eval desttop=`cat .destination`
 jsonfile=$1
 echo "Downloading $jsonfile"
 json=`jq . < $jsonfile`
