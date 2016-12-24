@@ -16,6 +16,7 @@ folder="`sed -e 's/^\s*//' <<< ${human_name[-1]}`"
 
 folder=$desttop/"$folder"
 
+echo "Downloading to $folder"
 if [[ -e "$folder" ]];
 then
     rm -rf "$folder"
@@ -38,8 +39,13 @@ while [[ $i -lt $length ]]; do
         download=`jq .[$j] <<< $downloads`
         typename=`jq .name <<< $download`
         url=`jq -r .url.web <<< $download`
-        echo "Downloading $typename at $url..."
-        wget -P "$folder/" --content-disposition $url
+        if [[ $url == "null" ]];
+        then
+            echo "Skipping $typename, no url"
+        else
+            echo "Downloading $typename at $url..."
+            wget -P "$folder/" --content-disposition $url
+        fi
         j=$((j + 1))
     done
     i=$((i + 1))
